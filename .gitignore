@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.DS_Store
+*.pyc
+.cloud_bucket/
+temp_*
+.cursor/
+.agent-tools/
+*.compressed
+*.metadata.json
+*.log
+*.png
+*.jpg
+*.jpeg
+
