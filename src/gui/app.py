@@ -112,6 +112,8 @@ with tabs[0]:
                     st.error("Provide compressed bytes and metadata JSON (or compress first).")
                 else:
                     metadata = json.loads(meta_json)
+                    # Fix JSON keys (convert string keys to integers)
+                    metadata = decomp_compressor._fix_json_keys(metadata)
                     start = time.time()
                     restored = decomp_compressor.decompress(comp_bytes, metadata)
                     dec_time = time.time() - start
@@ -121,10 +123,19 @@ with tabs[0]:
                         "decompressed_size": len(restored),
                         "decompression_time_s": dec_time,
                     })
+                    
+                    # Try to detect file extension from original filename
+                    original_name = comp_file.name if comp_file else "file"
+                    # Remove .compressed extension if present
+                    if original_name.endswith('.compressed'):
+                        original_name = original_name[:-11]
+                    # Add .restored extension
+                    restored_name = f"{original_name}.restored" if '.' in original_name else f"{original_name}_restored"
+                    
                     st.download_button(
                         label="Download decompressed data",
                         data=restored,
-                        file_name=f"restored_{int(time.time())}",
+                        file_name=restored_name,
                     )
             except Exception as e:
                 st.error(f"Decompression failed: {e}")
@@ -159,12 +170,26 @@ with tabs[2]:
     st.header("Cloud Storage Simulation")
     cloud = get_cloud()
     uploaded_cloud = st.file_uploader("Upload file to cloud bucket", key="cloud_upl")
+    
+    col_upload1, col_upload2 = st.columns(2)
+    with col_upload1:
+        compress_upload = st.checkbox("Compress before upload", key="cloud_compress")
+    with col_upload2:
+        algo_upload = None
+        if compress_upload:
+            algo_upload = st.selectbox("Algorithm", ["huffman", "lzw", "arithmetic"], key="cloud_algo")
+    
     if uploaded_cloud is not None and st.button("Upload to cloud", use_container_width=True):
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             tmp.write(uploaded_cloud.read())
             tmp_path = tmp.name
-        res = cloud.upload(tmp_path, object_name=uploaded_cloud.name)
+        res = cloud.upload(tmp_path, object_name=uploaded_cloud.name, compress=compress_upload, algorithm=algo_upload)
         os.unlink(tmp_path)
+        
+        # Display results nicely
+        if compress_upload and 'compression_stats' in res:
+            st.success(f"Uploaded with {res['compression_stats']['algorithm']} compression")
+            st.json(res['compression_stats'])
         st.write(res)
 
     st.subheader("Bucket summary")

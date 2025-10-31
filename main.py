@@ -46,7 +46,9 @@ def cmd_detect(args):
 def cmd_cloud(args):
     cloud = CloudSimulator()
     if args.action == "upload":
-        res = cloud.upload(args.path)
+        compress = getattr(args, 'compress', False)
+        algorithm = getattr(args, 'algorithm', None)
+        res = cloud.upload(args.path, compress=compress, algorithm=algorithm)
         print(res)
     elif args.action == "download":
         res = cloud.download(args.object, args.path)
@@ -81,8 +83,10 @@ def build_parser():
 
     cl = sub.add_parser("cloud")
     cl.add_argument("action", choices=["upload", "download", "summary"])
-    cl.add_argument("path", nargs="?")
-    cl.add_argument("object", nargs="?")
+    cl.add_argument("path", nargs="?", help="File path (local file for upload, output path for download)")
+    cl.add_argument("object", nargs="?", help="Cloud object name (for download)")
+    cl.add_argument("--compress", action="store_true", help="Compress file before upload")
+    cl.add_argument("--algorithm", choices=list(ALGORITHMS.keys()), help="Compression algorithm")
     cl.set_defaults(func=cmd_cloud)
 
     return p
