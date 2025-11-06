@@ -14,3 +14,7 @@ temp_*
 *.jpg
 *.jpeg
 
+# Keep .streamlit config for deployment
+!.streamlit/
+!.streamlit/config.toml
+
