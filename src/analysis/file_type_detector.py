@@ -95,11 +95,11 @@ class FileTypeDetector:
         """Get recommended compression strategy for file category."""
         strategies = {
             'text': 'huffman',      # Huffman works well for text
-            'image': 'lzw',         # LZW good for images with patterns
+            'image': 'arithmetic',  # Arithmetic coding good for images
             'audio': 'arithmetic',  # Arithmetic coding for audio
-            'video': 'lzw',         # LZW for video frames
+            'video': 'arithmetic',  # Arithmetic coding for video
             'archive': 'skip',      # Skip already compressed files
-            'binary': 'lzw',        # LZW for binary data
+            'binary': 'huffman',    # Huffman for binary data
             'unknown': 'huffman'    # Default to Huffman
         }
         return strategies.get(category, 'huffman')
@@ -209,9 +209,9 @@ class FileTypeDetector:
                     'expected_ratio': 0.4 - 0.6
                 },
                 {
-                    'algorithm': 'lzw',
+                    'algorithm': 'arithmetic',
                     'priority': 2,
-                    'reason': 'Good for repetitive text patterns',
+                    'reason': 'Good for text with repetitive patterns',
                     'expected_ratio': 0.5 - 0.7
                 }
             ])
@@ -219,9 +219,9 @@ class FileTypeDetector:
         elif category == 'image':
             recommendations.extend([
                 {
-                    'algorithm': 'lzw',
+                    'algorithm': 'arithmetic',
                     'priority': 1,
-                    'reason': 'Excellent for image data with spatial patterns',
+                    'reason': 'Excellent for image data with patterns',
                     'expected_ratio': 0.3 - 0.8
                 },
                 {
@@ -235,15 +235,15 @@ class FileTypeDetector:
         elif redundancy > 0.5:  # High redundancy
             recommendations.extend([
                 {
-                    'algorithm': 'lzw',
+                    'algorithm': 'arithmetic',
                     'priority': 1,
-                    'reason': 'High redundancy indicates good LZW compression potential',
+                    'reason': 'Arithmetic coding excels with high redundancy',
                     'expected_ratio': 0.2 - 0.5
                 },
                 {
-                    'algorithm': 'arithmetic',
+                    'algorithm': 'huffman',
                     'priority': 2,
-                    'reason': 'Arithmetic coding excels with high redundancy',
+                    'reason': 'Huffman coding good for high redundancy data',
                     'expected_ratio': 0.3 - 0.6
                 }
             ])
@@ -257,20 +257,12 @@ class FileTypeDetector:
                     'expected_ratio': 0.6 - 0.9
                 },
                 {
-                    'algorithm': 'lzw',
+                    'algorithm': 'arithmetic',
                     'priority': 2,
-                    'reason': 'Dictionary-based compression',
+                    'reason': 'Theoretical optimal compression',
                     'expected_ratio': 0.7 - 0.9
                 }
             ])
-        
-        # Add arithmetic coding for all cases
-        recommendations.append({
-            'algorithm': 'arithmetic',
-            'priority': 3,
-            'reason': 'Theoretical optimal compression',
-            'expected_ratio': 0.5 - 0.8
-        })
         
         return sorted(recommendations, key=lambda x: x['priority'])
 

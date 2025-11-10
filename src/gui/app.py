@@ -9,7 +9,6 @@ import streamlit as st
 # Support running via "streamlit run src/gui/app.py" (no package context)
 try:
     from ..algorithms.huffman import HuffmanCompressor
-    from ..algorithms.lzw import LZWCompressor
     from ..algorithms.arithmetic import ArithmeticCompressor
     from ..analysis.compression_analyzer import CompressionAnalyzer
     from ..analysis.file_type_detector import FileTypeDetector
@@ -20,7 +19,6 @@ except Exception:
     if ROOT not in sys.path:
         sys.path.insert(0, ROOT)
     from src.algorithms.huffman import HuffmanCompressor
-    from src.algorithms.lzw import LZWCompressor
     from src.algorithms.arithmetic import ArithmeticCompressor
     from src.analysis.compression_analyzer import CompressionAnalyzer
     from src.analysis.file_type_detector import FileTypeDetector
@@ -29,7 +27,6 @@ except Exception:
 
 ALGORITHMS = {
     "Huffman": HuffmanCompressor,
-    "LZW": LZWCompressor,
     "Arithmetic": ArithmeticCompressor,
 }
 
@@ -47,7 +44,7 @@ def get_cloud() -> CloudSimulator:
 
 
 st.set_page_config(page_title="Compression Toolkit", layout="wide")
-st.title("Compression Toolkit (Huffman, LZW, Arithmetic)")
+st.title("Compression Toolkit (Huffman, Arithmetic)")
 
 tabs = st.tabs(["Compress / Decompress", "Analyze", "Cloud"],)
 
@@ -177,7 +174,7 @@ with tabs[2]:
     with col_upload2:
         algo_upload = None
         if compress_upload:
-            algo_upload = st.selectbox("Algorithm", ["huffman", "lzw", "arithmetic"], key="cloud_algo")
+            algo_upload = st.selectbox("Algorithm", ["huffman", "arithmetic"], key="cloud_algo")
     
     if uploaded_cloud is not None and st.button("Upload to cloud", use_container_width=True):
         with tempfile.NamedTemporaryFile(delete=False) as tmp:

@@ -1,7 +1,7 @@
-Compression Toolkit (Huffman, LZW, Arithmetic)
+Compression Toolkit (Huffman, Arithmetic)
 
 A learning-focused, practical scaffold for lossless compression:
-- Huffman, LZW (12-bit), and Arithmetic coders
+- Huffman and Arithmetic coders
 - File-type detection with entropy/redundancy analysis and recommendations
 - Analyzer for compression ratios, speed, and integrity verification
 - Cloud storage simulator (bandwidth + cost model)
@@ -11,7 +11,7 @@ Project layout
 ```
 DAAproj/
 ├── src/
-│   ├── algorithms/            # Huffman, LZW, Arithmetic
+│   ├── algorithms/            # Huffman, Arithmetic
 │   ├── analysis/              # Type detection + analyzer
 │   ├── storage/               # Cloud simulator + helpers
 │   └── gui/                   # Streamlit app

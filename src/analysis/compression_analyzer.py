@@ -12,7 +12,6 @@ try:
 except Exception:  # fallback for headless envs
     plt = None
 from ..algorithms.huffman import HuffmanCompressor
-from ..algorithms.lzw import LZWCompressor
 from ..algorithms.arithmetic import ArithmeticCompressor
 from .file_type_detector import FileTypeDetector
 
@@ -23,7 +22,6 @@ class CompressionAnalyzer:
     def __init__(self):
         self.algorithms = {
             'huffman': HuffmanCompressor(),
-            'lzw': LZWCompressor(),
             'arithmetic': ArithmeticCompressor()
         }
         self.file_detector = FileTypeDetector()

@@ -7,7 +7,6 @@ import json
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
 from ..algorithms.huffman import HuffmanCompressor
-from ..algorithms.lzw import LZWCompressor
 from ..algorithms.arithmetic import ArithmeticCompressor
 
 
@@ -21,7 +20,6 @@ class PricingModel:
 # Algorithm mapping for compression
 ALGORITHMS = {
     'huffman': HuffmanCompressor,
-    'lzw': LZWCompressor,
     'arithmetic': ArithmeticCompressor,
     None: None
 }

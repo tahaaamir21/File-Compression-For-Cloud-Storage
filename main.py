@@ -1,7 +1,6 @@
 import argparse
 import os
 from src.algorithms.huffman import HuffmanCompressor
-from src.algorithms.lzw import LZWCompressor
 from src.algorithms.arithmetic import ArithmeticCompressor
 from src.analysis.compression_analyzer import CompressionAnalyzer
 from src.analysis.file_type_detector import FileTypeDetector
@@ -10,7 +9,6 @@ from src.storage.cloud_simulator import CloudSimulator
 
 ALGORITHMS = {
     "huffman": HuffmanCompressor,
-    "lzw": LZWCompressor,
     "arithmetic": ArithmeticCompressor,
 }
 
